@@ -50,6 +50,9 @@ dependencies:
   flutter_slidable: ^4.0.3
   shared_preferences: ^2.5.5
   image_picker: ^1.2.2
+  flutter_stripe: ^12.6.0
+  dio: ^5.9.2
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +80,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/google_icon.png
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

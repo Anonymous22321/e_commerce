@@ -38,38 +38,43 @@ class AuthViewModel extends GetxController {
 
   // make a function to sign in using google account
   void googleSignInMethod() async {
-    isLoading.value = true;
-    //reserve the sign in data into variable
-    // match the data called GoogleSignInAccount
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-    // let's see what the googleUser contains
+    try {
+      isLoading.value = true;
+      //reserve the sign in data into variable
+      // match the data called GoogleSignInAccount
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      // let's see what the googleUser contains
 
-    // here by access authentication we can get tokens we need
-    // don't forget to reserve data into match variable
-    GoogleSignInAuthentication googleSignInAuthentication =
-        await googleUser!.authentication;
-    // here to get credential by using GoogleAuthProvider.credential
-    // Of course we should reserve data into variable match it
-    // Another problem how to get idToken,accessToken
-    // Check above to know
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleSignInAuthentication.idToken,
-      accessToken: googleSignInAuthentication.accessToken,
-    );
-    // Let's reserve data into firebase
-    // but how to get credential
-    await _auth.signInWithCredential(credential).then((user) async {
-      saveUserData(user);
-      Get.snackbar(
-        "Success",
-        "Login Successful",
-        snackPosition: SnackPosition.BOTTOM,
-        colorText: Colors.black,
-        backgroundColor: Colors.white,
-        duration: Duration(seconds: 5),
-      );
-    });
-    isLoading.value = false;
+      // here by access authentication we can get tokens we need
+      // don't forget to reserve data into match variable
+      GoogleSignInAuthentication googleSignInAuthentication =
+              await googleUser!.authentication;
+      // here to get credential by using GoogleAuthProvider.credential
+      // Of course we should reserve data into variable match it
+      // Another problem how to get idToken,accessToken
+      // Check above to know
+      final AuthCredential credential = GoogleAuthProvider.credential(
+            idToken: googleSignInAuthentication.idToken,
+            accessToken: googleSignInAuthentication.accessToken,
+          );
+      // Let's reserve data into firebase
+      // but how to get credential
+      await _auth.signInWithCredential(credential).then((user) async {
+            saveUserData(user);
+            Get.snackbar(
+              "Success",
+              "Login Successful",
+              snackPosition: SnackPosition.BOTTOM,
+              colorText: Colors.black,
+              backgroundColor: Colors.white,
+              duration: Duration(seconds: 5),
+            );
+          });
+    } catch (e) {
+      Get.log(e.toString(),isError: true,);
+    } finally {
+      isLoading.value = false;
+    }
   }
   void emailAndPasswordSignInMethod() async {
     try {
