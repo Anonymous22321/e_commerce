@@ -10,7 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); // Load the secrets file
+  await dotenv.load(fileName: "secrets.json"); // Load the secrets file
   await Firebase.initializeApp();
   await Supabase.initialize(
     url: "https://rbloodlokdqgtckzclzp.supabase.co",
