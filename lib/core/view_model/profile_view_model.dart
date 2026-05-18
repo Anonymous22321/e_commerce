@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:e_commerce/core/service/firestore.dart';
 import 'package:e_commerce/helper/local_storage_data.dart';
+import 'package:e_commerce/model/order_model.dart';
+import 'package:e_commerce/model/product_model.dart';
 import 'package:e_commerce/model/user_model.dart';
 import 'package:e_commerce/view/profile/edit_profile.dart';
+import 'package:e_commerce/view/profile/order_history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +23,9 @@ class ProfileViewModel extends GetxController {
   late UserModel _userModel;
   File? pickedImage;
   final Rx<bool> _isLoading = false.obs;
-
+  List<OrderModel> orders = [];
+  List<String> ordersDate = [];
+  Map <String,List<ProductModel>> orderProduct ={};
 
   Rx<bool> get isLoading => _isLoading;
   final ValueNotifier<bool> _hiddenPassword = ValueNotifier(true);
@@ -51,6 +56,9 @@ class ProfileViewModel extends GetxController {
       case 0:
         Get.to(EditProfile());
         break;
+      case 2:
+        Get.to(OrderHistory());
+        break;
       case 5:
         signOut();
         break;
@@ -72,7 +80,7 @@ class ProfileViewModel extends GetxController {
   }
 
   Future editProfile() async {
-    _isLoading.value= true;
+    _isLoading.value = true;
     update();
     try {
       if (pickedImage != null) {
@@ -128,9 +136,31 @@ class ProfileViewModel extends GetxController {
       update();
     } catch (e) {
       log(e.toString());
-    }finally{
-      _isLoading.value =false;
+    } finally {
+      _isLoading.value = false;
       update();
+    }
+  }
+
+  Future orderHistory() async {
+    try {
+      await OrderFireStoreService().orderHistory(userModel.userId!).then((
+        value,
+      ) {
+        for (int i = 0; i < value.length; i++) {
+          orders.add(OrderModel.fromJson(value[i] as Map<String, dynamic>));
+        }
+        for(int i = 0; i < value.length; i++){
+          ordersDate.add(orders [ i].dateTime.toString());
+          orderProduct.addAll({
+            ordersDate [i].toString():[ ]
+          });
+        }
+
+
+      });
+    } catch (e) {
+      print(e);
     }
   }
 }

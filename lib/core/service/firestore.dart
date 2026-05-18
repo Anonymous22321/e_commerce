@@ -85,4 +85,8 @@ class OrderFireStoreService {
   Future addOrder(OrderModel order) async {
     return await _orderCollectionRef.doc(order.orderId).set(order.toJson());
   }
+  Future<List<DocumentSnapshot>> orderHistory(String userId)async{
+   var orders =   await _orderCollectionRef.where("userId",isEqualTo: userId).get();
+     return orders.docs;
+  }
 }

@@ -139,7 +139,7 @@ class CheckOutViewModel extends GetxController {
         OrderModel(
           userId: FirebaseAuth.instance.currentUser!.uid,
           dateTime: Timestamp.now(),
-          status: "Pending",
+          status: "Paid",
           address: Address(
             street1: street1,
             street2: street2,
