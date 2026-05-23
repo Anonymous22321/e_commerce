@@ -128,7 +128,6 @@ class CheckOutViewModel extends GetxController {
     loading.value = true;
     var cartController = Get.find<CartViewModel>();
     bool paymentSuccess = await makePayment(cartController.totalPrice, "USD");
-
     // 2. If the payment failed or was canceled, exit immediately!
     if (!paymentSuccess) {
       loading.value = false;
