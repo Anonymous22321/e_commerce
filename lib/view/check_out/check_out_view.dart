@@ -100,7 +100,8 @@ class CheckOutView extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: controller.selectedWidget, // Your pages (Delivery, Address, Summary)
+                          child: controller
+                              .selectedWidget, // Your pages (Delivery, Address, Summary)
                         ),
                       ),
                     ),
@@ -131,14 +132,16 @@ class CheckOutView extends StatelessWidget {
                           SizedBox(width: w * .3),
                           controller.currentIndex == 2
                               ? Expanded(
-                                  child: CustomButton(
-                                    title: "Deliver",
-                                    textColor: Colors.white,
-                                    onPressed: () {
-                                      controller.addOrder();
-                                    },
-                                    backgroundColor: primaryColor,
-                                  ),
+                                  child: controller.loading.value
+                                      ? CircularProgressIndicator()
+                                      : CustomButton(
+                                          title: "Deliver",
+                                          textColor: Colors.white,
+                                          onPressed: () {
+                                            controller.addOrder();
+                                          },
+                                          backgroundColor: primaryColor,
+                                        ),
                                 )
                               : Expanded(
                                   child: CustomButton(

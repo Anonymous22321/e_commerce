@@ -3,14 +3,17 @@ import 'dart:io';
 
 import 'package:e_commerce/core/service/firestore.dart';
 import 'package:e_commerce/helper/local_storage_data.dart';
+import 'package:e_commerce/model/order_model.dart';
 import 'package:e_commerce/model/user_model.dart';
 import 'package:e_commerce/view/profile/edit_profile.dart';
+import 'package:e_commerce/view/profile/order_history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileViewModel extends GetxController {
@@ -18,9 +21,14 @@ class ProfileViewModel extends GetxController {
 
   UserModel get userModel => _userModel;
   late UserModel _userModel;
+
   File? pickedImage;
   final Rx<bool> _isLoading = false.obs;
 
+  // The key is the formatted date string (e.g., "May 10, 2026")
+  // The value is a list of maps, where each map contains a specific product's data plus its order status
+  List<OrderModel> orders = [];
+  Map<String, List<Map<String, dynamic>>> groupedOrdersProducts = {};
 
   Rx<bool> get isLoading => _isLoading;
   final ValueNotifier<bool> _hiddenPassword = ValueNotifier(true);
@@ -51,6 +59,12 @@ class ProfileViewModel extends GetxController {
       case 0:
         Get.to(EditProfile());
         break;
+      case 2:
+        orderHistory().then((_) {
+          // 2. Only navigate to the screen once the map is fully populated
+          Get.to(() => OrderHistory());
+        });
+        break;
       case 5:
         signOut();
         break;
@@ -72,7 +86,7 @@ class ProfileViewModel extends GetxController {
   }
 
   Future editProfile() async {
-    _isLoading.value= true;
+    _isLoading.value = true;
     update();
     try {
       if (pickedImage != null) {
@@ -128,9 +142,59 @@ class ProfileViewModel extends GetxController {
       update();
     } catch (e) {
       log(e.toString());
-    }finally{
-      _isLoading.value =false;
+    } finally {
+      _isLoading.value = false;
       update();
+    }
+  }
+
+  Future orderHistory() async {
+    try {
+      _isLoading.value = true;
+      await OrderFireStoreService().orderHistory(userModel.userId!).then((
+        value,
+      ) {
+        //TODO 1. Clear previous data so tracking doesn't duplicate when refreshing
+        orders.clear();
+        groupedOrdersProducts.clear();
+
+        //TODO 2. Map snapshot docs into your local order list
+        for (int i = 0; i < value.length; i++) {
+          final Map<String, dynamic>? data =
+              value[i].data() as Map<String, dynamic>?;
+
+          if (data != null) {
+            orders.add(OrderModel.fromJson(data));
+          }
+        }
+
+        //TODO 3. Flatten the orders down to a product level
+        for (var order in orders) {
+          // Format your date timestamp to match "Sept 23, 2018"
+          DateTime date = order.dateTime.toDate();
+          String formattedOrderDate = DateFormat.yMMMd().format(date);
+
+          // Initialize key if missing
+          if (!groupedOrdersProducts.containsKey(formattedOrderDate)) {
+            groupedOrdersProducts[formattedOrderDate] = [];
+          }
+          // Loop through the inner products map from Firestore
+          // Loop through the inner products map from your OrderModel
+          order.products.forEach((productId, productData) {
+            // Read attributes directly from the model object instead of a Map cast
+            groupedOrdersProducts[formattedOrderDate]!.add({
+              'orderId': order.orderId,
+              'status': order.status,
+              'name': productData.productName ?? 'Unknown Item',
+              'price': productData.price ?? 0,
+              'image': productData.productImage ?? '',
+            });
+          });
+        }
+      });
+      _isLoading.value=false;
+    } on FirebaseException catch (e) {
+      Get.log(e.message.toString());
     }
   }
 }

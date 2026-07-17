@@ -1,11 +1,18 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:e_commerce/constants/colors.dart';
 import 'package:e_commerce/constants/row_constants.dart';
+import 'package:e_commerce/core/api/api_consumer.dart';
+import 'package:e_commerce/core/api/api_endpoints.dart';
+import 'package:e_commerce/core/api/dio_consumer.dart';
+import 'package:e_commerce/core/errors/exceptions.dart';
 import 'package:e_commerce/core/service/firestore.dart';
 import 'package:e_commerce/core/view_model/cart_view_model.dart';
 import 'package:e_commerce/model/order_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:e_commerce/view/check_out/widgets/add_address.dart';
 import 'package:e_commerce/view/check_out/widgets/delevery_time.dart';
 import 'package:e_commerce/view/check_out/widgets/summary.dart';
@@ -18,6 +25,8 @@ import 'package:uuid/uuid.dart';
 class CheckOutViewModel extends GetxController {
   int get currentIndex => _currentIndex;
   int _currentIndex = 0;
+  final ApiConsumer api = Get.put(DioConsumer(dio: Dio()));
+
 
   Pages get pages => _pages;
   Pages _pages = Pages.deliveryTime;
@@ -89,8 +98,7 @@ class CheckOutViewModel extends GetxController {
         return AddAddress();
       case Pages.summary:
         return Summary();
-      default:
-        return DeliveryTime();
+
     }
   }
 
@@ -118,12 +126,19 @@ class CheckOutViewModel extends GetxController {
   Future addOrder() async {
     loading.value = true;
     var cartController = Get.find<CartViewModel>();
+    bool paymentSuccess = await makePayment(cartController.totalPrice, "USD");
+    // 2. If the payment failed or was canceled, exit immediately!
+    if (!paymentSuccess) {
+      loading.value = false;
+      update();
+      return;
+    }
     try {
       await OrderFireStoreService().addOrder(
         OrderModel(
           userId: FirebaseAuth.instance.currentUser!.uid,
           dateTime: Timestamp.now(),
-          status: "Pending",
+          status: "Paid",
           address: Address(
             street1: street1,
             street2: street2,
@@ -138,7 +153,6 @@ class CheckOutViewModel extends GetxController {
         ),
       );
       cartController.cartList.clear();
-      cartController.cartList.clear();
       changeIndex(currentIndex + 1);
       await cartController.removeWholeCart();
       Get.snackbar("Success", "Order placed successfully!");
@@ -150,5 +164,46 @@ class CheckOutViewModel extends GetxController {
       loading.value = false;
       update();
     }
+  }
+
+  Future<bool> makePayment(double totalPrice, String currency) async {
+    try {
+      String clientSecret = await _getClientSecret(
+        (totalPrice * 100).toInt().toString(),
+        currency,
+      );
+      await _initPaymentSheet(clientSecret);
+      await stripe.Stripe.instance.presentPaymentSheet();
+      return true;
+    } on stripe.StripeException catch (e) {
+      // This catches when a user explicitly cancels or a card natively declines
+      Get.snackbar("Payment Canceled",
+          e.error.localizedMessage ?? "Transaction stopped.");
+      return false;
+    } on ServerExceptions catch (e) {
+      Get.log(e.errorModel.message);
+      Get.snackbar("Payment Error", e.errorModel.message);
+      return false;
+    }
+  }
+
+  Future<void> _initPaymentSheet(String clientSecret) async {
+    await stripe.Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: stripe.SetupPaymentSheetParameters(
+            paymentIntentClientSecret: clientSecret,
+            merchantDisplayName: "Sadek"
+        ));
+  }
+
+  Future<String> _getClientSecret(String amount, String currency) async {
+    final response = await api.post(
+      ApiEndpoints.baseUrl,
+      headers: {
+        "Authorization": "Bearer ${dotenv.env['STRIPE_SECRET_KEY']}",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: {"amount": amount, "currency": currency},
+    );
+    return response["client_secret"];
   }
 }

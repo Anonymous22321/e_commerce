@@ -5,10 +5,11 @@ import 'package:e_commerce/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductDetailsView extends StatelessWidget {
-  ProductModel model;
 
-  ProductDetailsView({required this.model, super.key});
+class ProductDetailsView extends StatelessWidget {
+ final ProductModel model;
+
+  const ProductDetailsView({required this.model, super.key});
 
   @override
   Widget build(BuildContext context) {
