@@ -98,8 +98,7 @@ class CheckOutViewModel extends GetxController {
         return AddAddress();
       case Pages.summary:
         return Summary();
-      default:
-        return DeliveryTime();
+
     }
   }
 
@@ -133,7 +132,8 @@ class CheckOutViewModel extends GetxController {
       loading.value = false;
       update();
       return;
-    }    try {
+    }
+    try {
       await OrderFireStoreService().addOrder(
         OrderModel(
           userId: FirebaseAuth.instance.currentUser!.uid,
@@ -152,7 +152,6 @@ class CheckOutViewModel extends GetxController {
           orderId: Uuid().v4(),
         ),
       );
-      cartController.cartList.clear();
       cartController.cartList.clear();
       changeIndex(currentIndex + 1);
       await cartController.removeWholeCart();
@@ -178,9 +177,10 @@ class CheckOutViewModel extends GetxController {
       return true;
     } on stripe.StripeException catch (e) {
       // This catches when a user explicitly cancels or a card natively declines
-      Get.snackbar("Payment Canceled", e.error.localizedMessage ?? "Transaction stopped.");
+      Get.snackbar("Payment Canceled",
+          e.error.localizedMessage ?? "Transaction stopped.");
       return false;
-    }on ServerExceptions catch (e) {
+    } on ServerExceptions catch (e) {
       Get.log(e.errorModel.message);
       Get.snackbar("Payment Error", e.errorModel.message);
       return false;
@@ -190,8 +190,8 @@ class CheckOutViewModel extends GetxController {
   Future<void> _initPaymentSheet(String clientSecret) async {
     await stripe.Stripe.instance.initPaymentSheet(
         paymentSheetParameters: stripe.SetupPaymentSheetParameters(
-          paymentIntentClientSecret: clientSecret,
-          merchantDisplayName: "Sadek"
+            paymentIntentClientSecret: clientSecret,
+            merchantDisplayName: "Sadek"
         ));
   }
 
