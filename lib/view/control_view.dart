@@ -29,7 +29,7 @@ class ControlView extends GetWidget<AuthViewModel> {
                     BottomNavigationBarItem(
                       activeIcon: Padding(
                         padding: const EdgeInsets.only(top: 15.0),
-                        child: CustomText(title: "Explore", fontSize: 18),
+                        child: CustomText(title: "explore".tr, fontSize: 18),
                       ),
                       icon: Padding(
                         padding: const EdgeInsets.only(top: 15.0),
@@ -44,7 +44,7 @@ class ControlView extends GetWidget<AuthViewModel> {
                     BottomNavigationBarItem(
                       activeIcon: Padding(
                         padding: const EdgeInsets.only(top: 15.0),
-                        child: CustomText(title: "Cart", fontSize: 18),
+                        child: CustomText(title: "cart".tr, fontSize: 18),
                       ),
                       icon: Padding(
                         padding: const EdgeInsets.only(top: 15.0),
@@ -59,7 +59,7 @@ class ControlView extends GetWidget<AuthViewModel> {
                     BottomNavigationBarItem(
                       activeIcon: Padding(
                         padding: const EdgeInsets.only(top: 15.0),
-                        child: CustomText(title: "Account", fontSize: 18),
+                        child: CustomText(title: "account".tr, fontSize: 18),
                       ),
                       icon: Padding(
                         padding: const EdgeInsets.only(top: 15.0),

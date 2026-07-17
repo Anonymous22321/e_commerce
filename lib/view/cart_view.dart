@@ -205,7 +205,7 @@ class CartView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomText(
-                              title: "TOTAL",
+                              title: "total".tr,
                               fontWeight: FontWeight.normal,
                             ),
                             SizedBox(height: 5),
@@ -218,7 +218,7 @@ class CartView extends StatelessWidget {
                         const Spacer(),
                         Expanded(
                           child: CustomButton(
-                            title: "CHECKOUT",
+                            title: "checkout".tr,
                             textColor: Colors.white,
 
                             onPressed: () {

@@ -1,4 +1,5 @@
 import 'package:e_commerce/core/api/api_endpoints.dart';
+import 'package:e_commerce/core/service/translations.dart';
 import 'package:e_commerce/helper/binding.dart' as helper;
 import 'package:e_commerce/view/control_view.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -17,8 +19,10 @@ void main() async {
     anonKey: "sb_publishable_hwqTp-EwilMQLzYnClmw7Q_CZu0Y3tD",
   );
   Stripe.publishableKey = ApiKeys.publishableKey;
+  await GetStorage.init();
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -29,7 +33,13 @@ class MyApp extends StatelessWidget {
       initialBinding: helper.Binding(),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(fontFamily: "SfProDisplay",colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(
+        fontFamily: "SfProDisplay",
+        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+      ),
+      translations: Translation(),
+      locale: Locale('en'),
+      fallbackLocale: Locale('en'),
       home: ControlView(),
     );
   }

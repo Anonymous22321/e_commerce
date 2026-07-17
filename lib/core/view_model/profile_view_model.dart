@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:e_commerce/core/service/firestore.dart';
+import 'package:e_commerce/core/view_model/app_language.dart';
 import 'package:e_commerce/helper/local_storage_data.dart';
 import 'package:e_commerce/model/order_model.dart';
 import 'package:e_commerce/model/user_model.dart';
@@ -66,6 +67,9 @@ class ProfileViewModel extends GetxController {
         });
         break;
       case 5:
+        changeLanguage();
+        break;
+      case 6:
         signOut();
         break;
     }
@@ -197,4 +201,126 @@ class ProfileViewModel extends GetxController {
       Get.log(e.message.toString());
     }
   }
-}
+
+  void changeLanguage() {
+    Get.bottomSheet(
+      GetBuilder<AppLanguage>(
+        init: AppLanguage(), // Re-use the initialized global language controller
+        builder: (controller) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header with Title and Close Button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Language',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.cancel, color: Colors.grey, size: 28),
+                      onPressed: () => Get.back(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                const Divider(),
+                const SizedBox(height: 10),
+
+                // English Option
+                _buildLanguageTile(
+                  title: 'English',
+                  flagAsset: 'assets/images/en_flag.png', // Replace with your actual asset path
+                  value: 'en',
+                  groupValue: controller.appLocale,
+                  onChanged: (val) {
+                    controller.changeLanguage(val!);
+                    Get.back(); // Close bottom sheet on selection
+                  },
+                ),
+                const Divider(),
+
+                // Arabic Option (Or any other language from your design)
+                _buildLanguageTile(
+                  title: 'Arabic',
+                  flagAsset: 'assets/images/ar_flag.png', // Replace with your actual asset path
+                  value: 'ar',
+                  groupValue: controller.appLocale,
+                  onChanged: (val) {
+                    controller.changeLanguage(val!);
+                    Get.back();
+                  },
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          );
+        },
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  // Custom helper to style list options to match your design
+  Widget _buildLanguageTile({
+    required String title,
+    required String flagAsset,
+    required String value,
+    required String groupValue,
+    required ValueChanged<String?> onChanged,
+  }) {
+    final bool isSelected = value == groupValue;
+    return InkWell(
+      onTap: () => onChanged(value),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? Colors.black : Colors.grey[600],
+              ),
+            ),
+            Row(
+              children: [
+                // Display flag
+                Image.asset(
+                  flagAsset,
+                  width: 60,
+                  height: 50,
+                  fit: BoxFit.fill,
+                ),
+                const SizedBox(width: 12),
+                // Radio button indicator
+                Radio<String>(
+                  value: value,
+                  groupValue: groupValue,
+                  onChanged: onChanged,
+                  activeColor: Colors.green, // Match theme accent
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }}

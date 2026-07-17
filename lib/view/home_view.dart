@@ -51,7 +51,7 @@ class HomeView extends StatelessWidget {
                   ),
                   SizedBox(height: h * .04),
                   CustomText(
-                    title: "Categories",
+                    title: "categories".tr,
                     fontFamily: "PlayfairDisplay",
                     fontStyle: FontStyle.italic,
                   ),
@@ -71,6 +71,7 @@ class HomeView extends StatelessWidget {
                               radius: 30,
                               child: Image.network(
                                 controller.categoryModel[index].image!,
+                                errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
                               ),
                             ),
                             SizedBox(height: h * .01),
@@ -90,14 +91,14 @@ class HomeView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText(
-                        title: "Best Selling",
+                        title: "bestSelling".tr,
                         fontFamily: "PlayfairDisplay",
                         fontStyle: FontStyle.italic,
                       ),
                       GestureDetector(
                         onTap: () {},
                         child: CustomText(
-                          title: "see all",
+                          title: "seeAll".tr,
                           fontFamily: "PlayfairDisplay",
                           fontStyle: FontStyle.italic,
                         ),

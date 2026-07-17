@@ -1,0 +1,26 @@
+const Map<String, String> en = {
+  'categories': "Categories",
+  'bestSelling':"Best Selling",
+  'seeAll': "see all",
+  'explore':"Explore",
+  'cart':"Cart",
+  'account':"Account",
+  'total':"TOTAL",
+  'checkout':"CHECKOUT",
+  'editProfile':"Edit Profile",
+  'shippingAddress':"Shipping Address",
+  'orderHistory': "Order History",
+  'cards': "Cards",
+  'notifications':"Notifications",
+  'logout':"Log Out",
+  'language': "Languages",
+  'saveChanges':"Save Changes",
+  'changeImage':"Change Your Image",
+  'trackOrder': "Track Order",
+  'addToCart': "ADD TO CART",
+  'details': 'Details',
+  'color': "Colour",
+  'size':"Size",
+  'price':"Price"
+
+};

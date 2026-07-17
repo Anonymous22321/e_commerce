@@ -8,7 +8,7 @@ import '../../constants/colors.dart';
 class CheckOutView extends StatelessWidget {
   CheckOutView({super.key});
 
-  List<String> steps = ["Delivery", "Address", "Summary"];
+ final List<String> steps = ["Delivery", "Address", "Summary"];
 
   @override
   Widget build(BuildContext context) {

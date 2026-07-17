@@ -4,20 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileView extends StatelessWidget {
-  final List<String> _menu = [
-    "Edit Profile",
-    "Shipping Address",
-    "Order History",
-    "Cards",
-    "Notifications",
-    "Log Out",
-  ];
+
   final List<String> _menuIcons = [
     "assets/images/Icon_Edit-Profile.png",
     "assets/images/Icon_Location.png",
     "assets/images/Icon_History.png",
     "assets/images/Icon_Payment.png",
     "assets/images/Icon_Alert.png",
+    "assets/images/Icon_Language.png",
     "assets/images/Icon_Exit.png",
   ];
 
@@ -25,6 +19,15 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> menu = [
+      "editProfile".tr,
+      "shippingAddress".tr,
+      "orderHistory".tr,
+      "cards".tr,
+      "notifications".tr,
+      "language".tr,
+      "logout".tr,
+    ];
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return GetBuilder(
@@ -68,7 +71,7 @@ class ProfileView extends StatelessWidget {
                       padding: .all(8),
                       child: ListTile(
                         onTap: () => controller.action(index),
-                        title: CustomText(title: _menu[index],fontSize: 24,fontWeight: .w500,),
+                        title: CustomText(title: menu[index],fontSize: 24,fontWeight: .w500,),
                         leading: Image.asset(_menuIcons[index],scale: .85,),
                         trailing: index < 5
                             ? Icon(Icons.arrow_forward_ios)
@@ -76,7 +79,7 @@ class ProfileView extends StatelessWidget {
                       ),
                     ),
                     separatorBuilder: (context, index) => SizedBox(height: 18),
-                    itemCount: _menu.length,
+                    itemCount: menu.length,
                   ),
                 ),
               ],
