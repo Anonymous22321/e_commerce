@@ -47,3 +47,6 @@ app.*.map.json
 # Sensitive API Keys
 .env
 secrets.json
+/.artifacts/260ba4b7-2ee2-477b-9d74-0a78bc5c81fb/implementation_plan.artifact.md
+/.artifacts/260ba4b7-2ee2-477b-9d74-0a78bc5c81fb/task.artifact.md
+/.artifacts/260ba4b7-2ee2-477b-9d74-0a78bc5c81fb/walkthrough.artifact.md
