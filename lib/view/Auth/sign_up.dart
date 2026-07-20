@@ -33,10 +33,10 @@ class SignUp extends GetWidget<AuthViewModel> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: .035 * h),
-                  CustomText(title: "Sign Up", fontSize: 30),
+                  CustomText(title: "signUp".tr, fontSize: 30),
                   SizedBox(height: .05 * h),
                   CustomTextFormField(
-                    labelText: "Name",
+                    labelText: "name".tr,
                     hint: "Please Enter your name",
                     onChange: (value) {
                       controller.name = value;
@@ -47,7 +47,7 @@ class SignUp extends GetWidget<AuthViewModel> {
                   ),
                   SizedBox(height: .05 * h),
                   CustomTextFormField(
-                    labelText: "Email",
+                    labelText: "email".tr,
                     hint: "example@mail.com",
                     onChange: (value) {
                       controller.email = value;
@@ -59,7 +59,7 @@ class SignUp extends GetWidget<AuthViewModel> {
                   SizedBox(height: .05 * h),
                   Obx(
                     () => CustomTextFormField(
-                      labelText: "Password",
+                      labelText: "password".tr,
                       hint: "**************",
                       obscureText: controller.isPasswordHidden.value,
                       suffixIcon: IconButton(
@@ -83,7 +83,7 @@ class SignUp extends GetWidget<AuthViewModel> {
                     () => controller.isLoading.value
                         ? Center(child: CircularProgressIndicator())
                         : CustomButton(
-                            title: "Register",
+                            title: "register".tr,
                             onPressed: () {
                               _formKey.currentState!.save();
                               if (_formKey.currentState!.validate()) {
@@ -98,7 +98,7 @@ class SignUp extends GetWidget<AuthViewModel> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomText(
-                        title: "Already have an account?",
+                        title: "haveAccount".tr,
                         fontFamily: "PlayfairDisplay",
                         fontStyle: FontStyle.italic,
                       ),
@@ -107,7 +107,7 @@ class SignUp extends GetWidget<AuthViewModel> {
                           Get.offAll(Login());
                         },
                         child: CustomText(
-                          title: "Login",
+                          title: "login".tr,
                           color: Colors.blue,
                           fontFamily: "PlayfairDisplay",
                           fontStyle: FontStyle.italic,

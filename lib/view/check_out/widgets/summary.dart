@@ -67,7 +67,7 @@ class Summary extends StatelessWidget {
             ),
           ),
           SizedBox(height: 50),
-          CustomText(title: "Shipping Address", fontSize: 24),
+          CustomText(title: "shippingAddress".tr, fontSize: 24),
           SizedBox(height: 20),
           GetBuilder<CheckOutViewModel>(
             init: Get.find<CheckOutViewModel>(),
@@ -85,7 +85,7 @@ class Summary extends StatelessWidget {
                     controller.changeIndex(1);
                   },
                   child: CustomText(
-                    title: "Change",
+                    title: "change".tr,
                     color: primaryColor,
                     fontWeight: .w500,
                   ),

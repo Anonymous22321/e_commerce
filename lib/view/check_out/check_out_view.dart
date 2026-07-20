@@ -8,7 +8,7 @@ import '../../constants/colors.dart';
 class CheckOutView extends StatelessWidget {
   CheckOutView({super.key});
 
- final List<String> steps = ["Delivery", "Address", "Summary"];
+ final List<String> steps = ["delivery".tr, "address".tr, "summary".tr];
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class CheckOutView extends StatelessWidget {
       init: CheckOutViewModel(),
       builder: (controller) => Scaffold(
         appBar: AppBar(
-          title: CustomText(title: "CheckOut"),
+          title: CustomText(title: "checkout".tr),
           centerTitle: true,
           leading: IconButton(
             onPressed: () => Get.back(),
@@ -119,7 +119,7 @@ class CheckOutView extends StatelessWidget {
                               ? Spacer()
                               : Expanded(
                                   child: CustomButton(
-                                    title: "Back",
+                                    title: "back".tr,
                                     textColor: Colors.black,
                                     onPressed: () {
                                       controller.changeIndex(
@@ -135,17 +135,17 @@ class CheckOutView extends StatelessWidget {
                                   child: controller.loading.value
                                       ? CircularProgressIndicator()
                                       : CustomButton(
-                                          title: "Deliver",
+                                          title: "deliver".tr,
                                           textColor: Colors.white,
-                                          onPressed: () {
-                                            controller.addOrder();
+                                          onPressed: () async{
+                                           await controller.addOrder();
                                           },
                                           backgroundColor: primaryColor,
                                         ),
                                 )
                               : Expanded(
                                   child: CustomButton(
-                                    title: "Next",
+                                    title: "next".tr,
                                     textColor: Colors.white,
                                     onPressed: () {
                                       controller.changeIndex(

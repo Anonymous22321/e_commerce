@@ -28,7 +28,7 @@ class Login extends GetWidget<AuthViewModel> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomText(title: "Welcome Back,", fontSize: 30),
+                      CustomText(title: "welcome".tr, fontSize: 30),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -37,7 +37,7 @@ class Login extends GetWidget<AuthViewModel> {
                           );
                         },
                         child: CustomText(
-                          title: "Sign Up",
+                          title: "signUp".tr,
                           color: primaryColor,
                           fontSize: 25,
                         ),
@@ -45,14 +45,14 @@ class Login extends GetWidget<AuthViewModel> {
                     ],
                   ),
                   CustomText(
-                    title: "sign in to continue",
+                    title: "signIn".tr,
                     color: Colors.grey,
                     fontWeight: FontWeight.w700,
                   ),
                   SizedBox(height: .05 * h),
 
                   CustomTextFormField(
-                    labelText: "Email",
+                    labelText: "email".tr,
                     hint: "example@mail.com",
                     onChange: (value) {
                       controller.email = value;
@@ -64,7 +64,7 @@ class Login extends GetWidget<AuthViewModel> {
                   SizedBox(height: .05 * h),
                   Obx(
                     () => CustomTextFormField(
-                      labelText: "Password",
+                      labelText: "password".tr,
                       hint: "**************",
                       obscureText: controller.isPasswordHidden.value,
                       suffixIcon: IconButton(
@@ -88,7 +88,7 @@ class Login extends GetWidget<AuthViewModel> {
                     alignment: AlignmentDirectional.topEnd,
                     child: TextButton(
                       onPressed: () {},
-                      child: CustomText(title: "Forgot Password?"),
+                      child: CustomText(title: "forgotPassword".tr),
                     ),
                   ),
                   SizedBox(height: .05 * h),
@@ -96,7 +96,7 @@ class Login extends GetWidget<AuthViewModel> {
                     () => controller.isLoading.value
                         ? Center(child: CircularProgressIndicator())
                         : CustomButton(
-                            title: "Login",
+                            title: "login".tr,
                             onPressed: () {
                               _formKey.currentState!.save();
                               if (_formKey.currentState!.validate()) {
@@ -119,7 +119,7 @@ class Login extends GetWidget<AuthViewModel> {
                       height: 30,
                     ),
                     backgroundColor: Colors.white,
-                    title: "Sign in using Google",
+                    title: "google".tr,
                     textColor: Colors.black,
                     onPressed: () {
                       controller.googleSignInMethod();

@@ -10,9 +10,11 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/view_model/app_language.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "secrets.json"); // Load the secrets file
+  await dotenv.load(fileName: ".env"); // Load the .env file
   await Firebase.initializeApp();
   await Supabase.initialize(
     url: "https://rbloodlokdqgtckzclzp.supabase.co",
@@ -20,12 +22,21 @@ void main() async {
   );
   Stripe.publishableKey = ApiKeys.publishableKey;
   await GetStorage.init();
-  runApp(const MyApp());
+  // 2. Fetch the language directly from local storage right here!
+  final box = GetStorage();
+  String initialLocale = box.read('lang') ?? 'en'; // Defaults to 'en' if empty
+
+  // 3. Inject AppLanguage controller early and pass the fetched locale
+  final appLanguage = Get.put(AppLanguage());
+  appLanguage.appLocale = initialLocale;
+
+  // 4. Pass the initial language down to MyApp
+  runApp(MyApp(initialLocale: initialLocale));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  final String initialLocale;
+  const MyApp({required this.initialLocale, super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -38,7 +49,7 @@ class MyApp extends StatelessWidget {
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
       translations: Translation(),
-      locale: Locale('en'),
+      locale: Locale(initialLocale),
       fallbackLocale: Locale('en'),
       home: ControlView(),
     );

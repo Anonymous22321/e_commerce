@@ -57,7 +57,7 @@ class AddAddress extends StatelessWidget {
                 validator: (value) => AppValidators.addressValidator(value),
               ),
               SizedBox(height: 40),
-              Container(
+              SizedBox(
                 width: Get.width,
                 child: Row(
                   mainAxisAlignment: .spaceBetween,

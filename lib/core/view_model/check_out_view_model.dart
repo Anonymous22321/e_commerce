@@ -14,7 +14,7 @@ import 'package:e_commerce/model/order_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:e_commerce/view/check_out/widgets/add_address.dart';
-import 'package:e_commerce/view/check_out/widgets/delevery_time.dart';
+import 'package:e_commerce/view/check_out/widgets/delivery_time.dart';
 import 'package:e_commerce/view/check_out/widgets/summary.dart';
 import 'package:e_commerce/view/control_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,7 +42,7 @@ class CheckOutViewModel extends GetxController {
   late String street1, street2, city, state, country;
 
   String get fullAddress =>
-      '${street1 + ',' + street2 + ',' + city + ',' + state + ',' + country}';
+      '$street1,$street2,$city,$state,$country';
 
   GlobalKey<FormState> addressGlobalKey = GlobalKey();
 
@@ -77,8 +77,9 @@ class CheckOutViewModel extends GetxController {
         addressGlobalKey.currentState!.save();
         if (addressGlobalKey.currentState!.validate()) {
           _pages = Pages.summary;
-        } else
+        } else {
           return;
+        }
       }
       if (_currentIndex == 3) {
         Get.offAll(ControlView());
@@ -167,6 +168,7 @@ class CheckOutViewModel extends GetxController {
   }
 
   Future<bool> makePayment(double totalPrice, String currency) async {
+
     try {
       String clientSecret = await _getClientSecret(
         (totalPrice * 100).toInt().toString(),
@@ -196,10 +198,14 @@ class CheckOutViewModel extends GetxController {
   }
 
   Future<String> _getClientSecret(String amount, String currency) async {
+    final stripeSecretKey = dotenv.env['STRIPE_SECRET_KEY'];
+    if (stripeSecretKey == null || stripeSecretKey.isEmpty) {
+      throw Exception("Stripe Secret Key is missing. Check your .env file.");
+    }
     final response = await api.post(
       ApiEndpoints.baseUrl,
       headers: {
-        "Authorization": "Bearer ${dotenv.env['STRIPE_SECRET_KEY']}",
+        "Authorization": "Bearer $stripeSecretKey",
         "Content-Type": "application/x-www-form-urlencoded",
       },
       data: {"amount": amount, "currency": currency},

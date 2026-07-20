@@ -23,9 +23,9 @@ class DeliveryTime extends StatelessWidget {
             onChanged: ( value) {
               controller.setDelivery(value);
             },
-            title: CustomText(title: "Standard Delivery"),
+            title: CustomText(title: "standard".tr),
             subtitle: CustomText(
-              title: "\nOrder will be delivered between 3 - 5 business days",
+              title: "standardDetails".tr,
               fontSize: 18,
               fontWeight: .w500,
               maxLines: 3,
@@ -40,11 +40,10 @@ class DeliveryTime extends StatelessWidget {
               controller.setDelivery(value);
 
             },
-            title: CustomText(title: "Next Day Delivery"),
+            title: CustomText(title: "nextDay".tr),
             subtitle: CustomText(
               title:
-                  "\nPlace your order before 6pm and your "
-                      "items will be delivered the next day",
+                  "nextDayDetails".tr,
               fontSize: 18,
               fontWeight: .w500,
               maxLines: 3,
@@ -59,11 +58,10 @@ class DeliveryTime extends StatelessWidget {
               controller.setDelivery(value);
 
             },
-            title: CustomText(title: "Nominated Delivery"),
+            title: CustomText(title: "nominated".tr),
             subtitle: CustomText(
               title:
-                  "\nPick a particular date from the calendar and"
-                      " order will be delivered on selected date",
+                  "nominatedDetails".tr,
               fontSize: 18,
               fontWeight: .w500,
               maxLines: 3,

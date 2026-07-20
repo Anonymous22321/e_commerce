@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:e_commerce/core/api/api_consumer.dart';
-import 'package:e_commerce/core/api/api_endpoints.dart';
 import 'package:e_commerce/core/api/api_interceptors.dart';
 import 'package:e_commerce/core/errors/exceptions.dart';
 

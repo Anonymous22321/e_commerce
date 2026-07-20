@@ -11,6 +11,17 @@ class ServerExceptions implements Exception{
 
 
 void handleDioExceptions(DioException e) {
+  if (e.response == null) {
+    throw ServerExceptions(
+      errorModel: ErrorModel(
+        code: "network_error",
+        doc_url: "",
+        message: e.message ?? "Connection failed",
+        type: "network",
+      ),
+    );
+  }
+
   switch (e.type) {
     case DioExceptionType.connectionTimeout:
       throw ServerExceptions(

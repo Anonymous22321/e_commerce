@@ -6,16 +6,6 @@ import 'package:get/get.dart';
 class AppLanguage extends GetxController {
   String appLocale = 'en';
 
-  @override
-  void onInit() async {
-    LocalStorage localStorage = LocalStorage();
-    appLocale = await localStorage.languageSelected;
-    Get.updateLocale(Locale(appLocale));
-    update();
-    super.onInit();
-  }
-
-
   void changeLanguage(String language ){
     LocalStorage localStorage = LocalStorage();
     if(language==appLocale) return;

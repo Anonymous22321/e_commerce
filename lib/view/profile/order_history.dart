@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OrderHistory extends StatelessWidget {
-  OrderHistory({super.key});
+  const OrderHistory({super.key});
 
   // final List<String> _orderDate = [
   //   "May 2,2026",
