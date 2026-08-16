@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       initialBinding: helper.Binding(),
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Shoply',
       theme: ThemeData(
         fontFamily: "SfProDisplay",
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
