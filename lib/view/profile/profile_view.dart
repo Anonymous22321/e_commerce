@@ -42,7 +42,7 @@ class ProfileView extends StatelessWidget {
                     mainAxisAlignment: .start,
                     children: [
                       CircleAvatar(
-                        radius: 60,
+                        radius: 40,
                         backgroundImage: controller.userModel.pic == ""
                             ? AssetImage("assets/images/Avatar.png")
                             : NetworkImage("${controller.userModel.pic}"),
